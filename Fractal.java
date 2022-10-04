@@ -4,22 +4,22 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 
 public class Fractal extends JPanel{
-    static int MAX_ITERATIONS = 100;
-    static int FRACTAL_WIDTH = 2560;
-    static int FRACTAL_HEIGHT = 1440;
+    static int maxIterations = 100;
+    static int fractalWidth = 2560;
+    static int fractalHeight = 1440;
     static int centerX = 230;
     static int centerY = -25;
     static double[][][] image;
     
     public static double[][][] render(){
         double zoom = 1.3;
-        double[][][] buffer = new double[FRACTAL_WIDTH][FRACTAL_HEIGHT][3];
-        for(int x = 0; x<FRACTAL_WIDTH; x++){
-            for(int y = 0; y<FRACTAL_HEIGHT;y++){
-                double cx = zoom*(-FRACTAL_WIDTH+(x-centerX)*2)/FRACTAL_HEIGHT;
-                double cy = zoom*(-FRACTAL_HEIGHT+(y-centerY)*2)/FRACTAL_HEIGHT; 
+        double[][][] buffer = new double[fractalWidth][fractalHeight][3];
+        for(int x = 0; x<fractalWidth; x++){
+            for(int y = 0; y<fractalHeight;y++){
+                double cx = zoom*(-fractalWidth+(x-centerX)*2)/fractalHeight;
+                double cy = zoom*(-fractalHeight+(y-centerY)*2)/fractalHeight; 
                 int i = countIterations(cx, cy);             
-                if(i < MAX_ITERATIONS){
+                if(i < maxIterations){
                     buffer[x][y][0] = 0.5 + 2 * Math.cos(3 + i * 0.15 + 1.0);
                     buffer[x][y][1] = 0.5 + 2 * Math.cos(3 + i * 0.15 + 0.6);
                     buffer[x][y][2] = 0.5 + 2 * Math.cos(3 + i * 0.15 + 0.0);
@@ -33,7 +33,7 @@ public class Fractal extends JPanel{
         double zr = 0.00000000000000000000000000000000001; 
         double zi = 0; 
         double threshhold = 6;
-        for(i = 0; i < MAX_ITERATIONS; i++){
+        for(i = 0; i < maxIterations; i++){
             double arg = Math.atan(zi/zr);
             double mod = Math.pow(zr, 2)+Math.pow(zi, 2);
             zr = (mod*Math.cos(arg*2))+cx;
@@ -52,8 +52,8 @@ public class Fractal extends JPanel{
             Graphics2D gx = (Graphics2D)g;
             gx.addRenderingHints(this.ANTIALIASING);
             gx.addRenderingHints(this.QUALITY_RENDER);
-            for(int x = 0; x < FRACTAL_WIDTH; x++) {
-                for(int y = 0; y<FRACTAL_HEIGHT;y++){
+            for(int x = 0; x < fractalWidth; x++) {
+                for(int y = 0; y<fractalHeight;y++){
                     float colr = (float)Math.max(0, Math.min(1, image[x][y][0]));
                     float colg = (float)Math.max(0, Math.min(1, image[x][y][1]));
                     float colb = (float)Math.max(0, Math.min(1, image[x][y][2]));
@@ -65,7 +65,7 @@ public class Fractal extends JPanel{
     };  
     public static void main(String[] args){
         JFrame frame = new JFrame();
-        frame.setSize(FRACTAL_WIDTH, FRACTAL_HEIGHT);
+        frame.setSize(fractalWidth, fractalHeight);
         frame.setContentPane(jf);
         image = render();
         jf.repaint();
@@ -73,8 +73,8 @@ public class Fractal extends JPanel{
         jf.addMouseListener(new MouseInputAdapter(){
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
-                centerX += FRACTAL_WIDTH/2 - e.getX();
-                centerY += FRACTAL_HEIGHT/2 - e.getY();
+                centerX += fractalWidth/2 - e.getX();
+                centerY += fractalHeight/2 - e.getY();
                 image = render();
                 jf.repaint();
             }
